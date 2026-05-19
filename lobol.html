@@ -2238,6 +2238,19 @@ const STORE = {
   }
 };
 
+function save(k,v){ STORE.set(k,v); }
+function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function uid(){ return Date.now()+Math.floor(Math.random()*1000); }
+function getDiscounted(p,force){ const on=force!==undefined?force:eieGeelActive; return on?Math.max(0,p.price-48):p.price; }
+function toggleExpand(k){ expandedItems[k]=!expandedItems[k]; }
+function toggleInfoSection(k){ infoExpanded[k]=!infoExpanded[k]; }
+function dl(content,filename,type='text/csv'){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
 function showStorageWarning() {
   const el = document.getElementById('storage-warning');
   if (el) el.style.display = 'flex';
@@ -2486,9 +2499,9 @@ const DEFAULT_FLEET = [
   {id:2,name:"Vragmotor 2",emoji:"🚛",truckCapacity:400,hasTrailer:true,trailerCapacity:200,notes:""},
 ];
 
-const PROD_CATS=['Alle','Fosfaatlekke (Somer)','Fos/Prot-lekke (Herfs)','Lekke vir Bulle (Crash Course)','Lekke vir Verse','Lekke vir Beeste','Lekke vir Skape','Voerkraal','Suiwel','Pluimvee','Varke','Perde','Ander'];
+let PROD_CATS=['Alle','Fosfaatlekke (Somer)','Fos/Prot-lekke (Herfs)','Lekke vir Bulle (Crash Course)','Lekke vir Verse','Lekke vir Beeste','Lekke vir Skape','Voerkraal','Suiwel','Pluimvee','Varke','Perde','Ander'];
 
-const INTAKE_MAP={'Lekke vir Beeste':{mode:'fixed',g:1200},'Lekke vir Verse':{mode:'fixed',g:680},'Lekke vir Bulle (Crash Course)':{mode:'per100',g:550},'Fosfaatlekke (Somer)':{mode:'fixed',g:170},'Fos/Prot-lekke (Herfs)':{mode:'fixed',g:210},'Lekke vir Skape':{mode:'fixed',g:300},'Voerkraal':{mode:'per100',g:30},'Suiwel':{mode:'fixed',g:1200}};
+let INTAKE_MAP={'Lekke vir Beeste':{mode:'fixed',g:1200},'Lekke vir Verse':{mode:'fixed',g:680},'Lekke vir Bulle (Crash Course)':{mode:'per100',g:550},'Fosfaatlekke (Somer)':{mode:'fixed',g:170},'Fos/Prot-lekke (Herfs)':{mode:'fixed',g:210},'Lekke vir Skape':{mode:'fixed',g:300},'Voerkraal':{mode:'per100',g:30},'Suiwel':{mode:'fixed',g:1200}};
 
 // ── STATE ───────────────────────────────────────────────────────
 let products = STORE.get('v3_products', DEFAULT_PRODUCTS);
@@ -2896,7 +2909,7 @@ function renderDashboard(){
 // ═══════════════════════════════════════════════════════════════
 // PRODUCTS
 // ═══════════════════════════════════════════════════════════════
-const PROD_CATS=['Alle','Fosfaatlekke (Somer)','Fos/Prot-lekke (Herfs)','Lekke vir Bulle (Crash Course)','Lekke vir Verse','Lekke vir Beeste','Lekke vir Skape'];
+PROD_CATS=['Alle','Fosfaatlekke (Somer)','Fos/Prot-lekke (Herfs)','Lekke vir Bulle (Crash Course)','Lekke vir Verse','Lekke vir Beeste','Lekke vir Skape'];
 const GUIDE_DATA=[
   {id:'spekulasie',title:'Spekulasie Kalwers & Ossies',icon:'🐂',sections:[
     {heading:'GROENVELD / SOMER',items:[
@@ -4503,7 +4516,7 @@ function toggleWorkerActive(id){ const w=workers.find(x=>x.id===id); if(w){ w.ac
 // ═══════════════════════════════════════════════════════════════
 // FEED CALCULATOR
 // ═══════════════════════════════════════════════════════════════
-const INTAKE_MAP={'Lekke vir Beeste':{mode:'fixed',g:1200},'Lekke vir Verse':{mode:'fixed',g:680},'Lekke vir Bulle (Crash Course)':{mode:'per100',g:550},'Fosfaatlekke (Somer)':{mode:'fixed',g:170},'Fos/Prot-lekke (Herfs)':{mode:'fixed',g:210},'Lekke vir Skape':{mode:'fixed',g:300}};
+INTAKE_MAP={'Lekke vir Beeste':{mode:'fixed',g:1200},'Lekke vir Verse':{mode:'fixed',g:680},'Lekke vir Bulle (Crash Course)':{mode:'per100',g:550},'Fosfaatlekke (Somer)':{mode:'fixed',g:170},'Fos/Prot-lekke (Herfs)':{mode:'fixed',g:210},'Lekke vir Skape':{mode:'fixed',g:300}};
 function getIntake(cat){ return INTAKE_MAP[cat]||{mode:'fixed',g:500}; }
 function calcBags(prod,animals,weight,days){
   const intake=getIntake(prod.category);
