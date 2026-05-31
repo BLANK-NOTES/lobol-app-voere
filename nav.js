@@ -4,14 +4,13 @@
 const PAGES = [
   {id:'dashboard',label:'Dashboard',icon:'🏠'},
   {id:'products',label:'Produkte',icon:'📦'},
-  {id:'truck',label:'Vragmotor Tel',icon:'🚛'},
+  {id:'truck',label:'Vragmotor & Aflewerings',icon:'🚛'},
   {id:'compare',label:'Vergelyking',icon:'📊'},
   {id:'stock',label:'Fabrieksvoorraad',icon:'🏭'},
   {id:'duties',label:'Pligte',icon:'📋'},
   {id:'reminders',label:'Herinneringe',icon:'🔔'},
   {id:'customers',label:'Klante',icon:'👥'},
   {id:'sales',label:'Verkope',icon:'🛒'},
-  {id:'deliveries',label:'Aflewerings',icon:'🗺️'},
   {id:'notes',label:'Notas',icon:'📝'},
   {id:'workers',label:'Werknemers',icon:'👷'},
   {id:'calc',label:'Berekenaar',icon:'🧮'},
@@ -19,7 +18,7 @@ const PAGES = [
   {id:'export',label:'Uitvoer & Rugsteun',icon:'💾'},
   {id:'health',    label:'Gesondheid & Notas', icon:'🏥'},
   {id:'flashcards',label:'Flitskaarte',       icon:'🃏'},
-  {id:'kaart',    label:'Ermelo Kaart',      icon:'🗺️'},
+  {id:'kaart',    label:'Amersfoort Kaart',      icon:'🗺️'},
   {id:'inligting',label:'Inligting & Gidse',icon:'📚'},
 ];
 const PRIMARY = PAGES.slice(0,5);

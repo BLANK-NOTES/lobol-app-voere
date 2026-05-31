@@ -89,7 +89,7 @@
   <section class="page" id="page-truck">
     <div id="truck-list-view">
       <div class="page-header">
-        <h1>Vragmotor Tel</h1>
+        <h1>Vragmotor &amp; Aflewerings</h1>
         <button class="icon-btn accent" onclick="openTruckAddModal()">＋</button>
       </div>
       <!-- Tab: Sessions / Fleet / Drivers -->
@@ -121,7 +121,9 @@
       <div id="truck-visual-section"></div>
       <div class="truck-summary" id="truck-summary"></div>
       <div id="eie-notice-truck"></div>
-      <button class="btn btn-primary btn-full" style="margin-bottom:12px" onclick="openModal('truck-item-modal')">＋ Voeg Produk By</button>
+      <!-- CLIENT STOPS / ROUTE (merged delivery) -->
+      <div id="truck-route-section"></div>
+      <button class="btn btn-primary btn-full" style="margin-bottom:12px" onclick="openTruckItemModal(null)">＋ Voeg Produk By (algemene lading)</button>
       <div class="count-list" id="truck-items"></div>
     </div>
   </section>
@@ -167,6 +169,7 @@
       <button class="icon-btn accent" onclick="openModal('rem-add-modal')">＋</button>
     </div>
     <div class="rem-list" id="rem-list"></div>
+    <div id="rem-notif-banner" style="margin-bottom:12px"></div>
   </section>
 
   <!-- CUSTOMERS -->
@@ -290,37 +293,27 @@
   <!-- KAART -->
   <section class="page" id="page-kaart">
     <div class="page-header">
-      <h1>🗺️ Ermelo Kaart</h1>
+      <h1>🗺️ Amersfoort Kaart</h1>
     </div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:10px">📡 Werk aflyn – afstande &amp; rigtings vanaf Amersfoort, MP.</div>
     <div class="chips" id="map-zoom-btns" style="margin-bottom:12px"></div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px">
-      <div id="map-container" style="width:100%;height:600px;position:relative">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg2);z-index:1;font-size:13px;color:var(--text3)" id="map-loading">🗺️ Laai kaart...</div>
-        <iframe
-          id="ermelo-map"
-          style="width:100%;height:100%;border:none;display:block"
-          loading="lazy"
-          allowfullscreen
-          referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.openstreetmap.org/export/embed.html?bbox=24.0%2C-28.5%2C32.0%2C-24.5&layer=mapnik&marker=-26.5167%2C29.9833"
-          onload="document.getElementById('map-loading').style.display='none'">
-        </iframe>
-      </div>
+      <div id="map-container" style="width:100%;position:relative"></div>
     </div>
     <!-- Town chips for quick navigation -->
     <div class="section-title">🏘️ Dorpe in Radius</div>
     <div class="chips" id="map-towns" style="flex-wrap:wrap;padding-bottom:6px"></div>
     <!-- Distance reference cards -->
-    <div class="section-title">📏 Afstande vanaf Ermelo</div>
+    <div class="section-title">📏 Afstande vanaf Amersfoort</div>
     <div id="map-distances"></div>
     <!-- Notes about area -->
     <div class="card" style="margin-top:12px">
-      <div style="font-weight:700;font-size:14px;margin-bottom:8px">📍 Ermelo Koördinate</div>
+      <div style="font-weight:700;font-size:14px;margin-bottom:8px">📍 Amersfoort Koördinate</div>
       <div style="font-size:13px;color:var(--text2);line-height:1.8">
-        <div>Latitude: -26.5167° S</div>
-        <div>Longitude: 29.9833° O</div>
+        <div>Latitude: -27.0167° S</div>
+        <div>Longitude: 29.8667° O</div>
         <div>Provinsie: Mpumalanga</div>
-        <div>Munisipaliteit: Mkhondo</div>
+        <div>Munisipaliteit: Dr Pixley ka Isaka Seme</div>
       </div>
     </div>
   </section>
@@ -409,11 +402,26 @@
 <!-- Truck Item -->
 <div class="modal-bg" id="truck-item-modal" onclick="closeModal('truck-item-modal')">
 <div class="modal" onclick="event.stopPropagation()">
-  <h3>Voeg by Vragmotor</h3>
+  <h3 id="ti-modal-title">Voeg by Vragmotor</h3>
   <div class="search-wrap">🔍 <input type="text" placeholder="Soek produk..." id="ti-search" oninput="renderTruckPicker()"/></div>
   <div class="picker-list" id="ti-picker"></div>
   <div class="modal-actions">
     <button class="btn btn-secondary" onclick="closeModal('truck-item-modal')">Sluit</button>
+  </div>
+</div></div>
+
+<!-- Client stop for a load session (merged delivery) -->
+<div class="modal-bg" id="truck-stop-modal" onclick="closeModal('truck-stop-modal')">
+<div class="modal" onclick="event.stopPropagation()">
+  <h3>Voeg Klant by Sessie</h3>
+  <label class="field-label">Klant</label>
+  <select id="ts-cust"><option value="">-- Kies klant --</option></select>
+  <label class="field-label">Afstand vanaf fabriek (km)</label>
+  <input type="number" inputmode="numeric" placeholder="bv. 45" id="ts-km"/>
+  <input placeholder="Stopsel notas (opsioneel)" id="ts-notes"/>
+  <div class="modal-actions">
+    <button class="btn btn-secondary" onclick="closeModal('truck-stop-modal')">Kanselleer</button>
+    <button class="btn btn-primary" onclick="addTruckStop()">Voeg By</button>
   </div>
 </div></div>
 
@@ -766,6 +774,12 @@
     if(currentPage==='dashboard') renderDashboard();
     if(currentPage==='reminders') renderReminders();
   }, 60000);
+  // Fire reminder notifications at their set time (every 30s, runs
+  // regardless of which page is open, and while backgrounded-but-alive)
+  if(typeof checkReminderNotifs==='function'){
+    checkReminderNotifs();
+    setInterval(checkReminderNotifs, 30000);
+  }
   // Refresh weather every 15 minutes while on the dashboard
   setInterval(function(){
     if(currentPage==='dashboard' && typeof weatherCache!=='undefined' && weatherCache){

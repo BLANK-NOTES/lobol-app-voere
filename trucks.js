@@ -195,21 +195,94 @@ function renderTruckDetail() {
       </div>`:''}
     </div>`;
 
+  // ── CLIENT STOPS / ROUTE ──────────────────────────────────────
+  renderTruckRoute(t);
+
   const itemsEl = document.getElementById('truck-items');
   if (!t.items.length) { itemsEl.innerHTML='<div class="empty">Geen items nie – tik "Voeg Produk By"</div>'; return; }
-  itemsEl.innerHTML = t.items.map(item=>`
+
+  // Group items by their client stop (null = "no client / general load")
+  const stops = t.stops||[];
+  const groups = [{id:null,label:'📦 Algemene lading (geen klant)'}]
+    .concat(stops.map(s=>({id:s.id,label:'👤 '+s.customerName+(s.km?` · ${s.km}km`:'')})));
+  const itemRow = item=>`
     <div class="count-row">
       <div class="count-info">
         <span class="count-name">${escH(item.name)}</span>
         <span class="count-sub">${item.unit} · R${item.price.toFixed(2)} elk · Totaal: R${item.total.toFixed(2)}</span>
       </div>
       <div class="count-controls">
-        <button class="qty-btn" onclick="updateTruckQty(${item.productId},-1)">−</button>
-        <input type="number" class="qty-input" value="${item.qty}" min="0" onchange="setTruckQty(${item.productId},this.value)"/>
-        <button class="qty-btn" onclick="updateTruckQty(${item.productId},1)">+</button>
-        <button class="icon-btn red sm" onclick="removeTruckItem(${item.productId})">✕</button>
+        <button class="qty-btn" onclick="updateTruckQty(${item.productId},-1,${item.stopId?`'${item.stopId}'`:'null'})">−</button>
+        <input type="number" class="qty-input" value="${item.qty}" min="0" onchange="setTruckQty(${item.productId},this.value,${item.stopId?`'${item.stopId}'`:'null'})"/>
+        <button class="qty-btn" onclick="updateTruckQty(${item.productId},1,${item.stopId?`'${item.stopId}'`:'null'})">+</button>
+        <button class="icon-btn red sm" onclick="removeTruckItem(${item.productId},${item.stopId?`'${item.stopId}'`:'null'})">✕</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  itemsEl.innerHTML = groups.map(g=>{
+    const its=t.items.filter(i=>(i.stopId||null)===g.id);
+    if(!its.length && g.id===null && stops.length) return ''; // hide empty general group when using stops
+    const bags=its.reduce((s,i)=>s+i.qty,0);
+    const val=its.reduce((s,i)=>s+i.total,0);
+    return `<div style="margin-bottom:10px">
+      <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+        <span>${g.label}</span>
+        <span style="font-size:11px;color:var(--text3);font-weight:600">${bags} sakke · R${val.toFixed(2)}</span>
+      </div>
+      ${its.length?its.map(itemRow).join('')
+        :`<div class="empty" style="padding:14px;font-size:12px">Geen produkte ${g.id?'vir hierdie klant':''} nie.${g.id?` <button class="btn btn-secondary btn-sm" style="margin-top:6px" onclick="openTruckItemModal('${g.id}')">＋ Voeg produk by</button>`:''}</div>`}
+    </div>`;
+  }).join('');
+}
+
+// Route summary: total km, fuel estimate, per-client stop cards
+function renderTruckRoute(t){
+  const el=document.getElementById('truck-route-section'); if(!el) return;
+  const stops=t.stops||[];
+  const totalKm=stops.reduce((s,x)=>s+(x.km||0),0);
+  // round trip (there and back) is the usual diesel cost
+  const roundKm=totalKm*2;
+  const litresPer100 = t.fuelPer100 || 35;   // sensible default for a loaded truck
+  const litres = roundKm * litresPer100/100;
+  el.innerHTML=`
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-weight:700;font-size:13px">🗺️ Roete &amp; Kliënte (${stops.length})</div>
+        <button class="btn btn-secondary btn-sm" onclick="openTruckStopModal()">＋ Klant</button>
+      </div>
+      ${stops.length?`
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+          <div class="route-stat"><div class="route-stat-val">${stops.length}</div><div class="route-stat-lbl">Kliënte</div></div>
+          <div class="route-stat"><div class="route-stat-val">${totalKm}</div><div class="route-stat-lbl">km enkel</div></div>
+          <div class="route-stat"><div class="route-stat-val">${roundKm}</div><div class="route-stat-lbl">km heen&amp;terug</div></div>
+          <div class="route-stat"><div class="route-stat-val">${litres.toFixed(0)}L</div><div class="route-stat-lbl">±diesel</div></div>
+        </div>
+        ${stops.map((s,idx)=>{
+          const its=t.items.filter(i=>(i.stopId||null)===s.id);
+          const bags=its.reduce((a,i)=>a+i.qty,0);
+          return `<div class="stop-card${s.done?' done-stop':''}">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="check-box${s.done?' checked':''}" onclick="toggleStopDone('${s.id}')" style="flex-shrink:0">${s.done?'✓':''}</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-weight:700;font-size:14px">${idx+1}. ${escH(s.customerName)}</div>
+                ${s.address?`<div style="font-size:11px;color:var(--text3)">${escH(s.address)}</div>`:''}
+                <div style="font-size:11px;color:var(--text3)">${its.length} produkte · ${bags} sakke</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+                <div style="display:flex;align-items:center;gap:4px">
+                  <input type="number" inputmode="numeric" class="qty-input" style="width:62px" value="${s.km||''}" placeholder="km" onchange="updateStopKm('${s.id}',this.value)"/>
+                  <span style="font-size:11px;color:var(--text3)">km</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:8px">
+              <button class="btn btn-secondary btn-sm" style="flex:1" onclick="openTruckItemModal('${s.id}')">＋ Produk vir klant</button>
+              ${s.address?`<a class="btn btn-secondary btn-sm" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.address)}" target="_blank" style="flex:0 0 auto">🧭</a>`:''}
+              <button class="icon-btn red sm" onclick="removeTruckStop('${s.id}')">🗑</button>
+            </div>
+          </div>`;
+        }).join('')}
+      `:'<div class="empty" style="padding:14px;font-size:12px">Geen kliënte nie. Pak meer as een klant op een vrag om diesel te spaar – tik “＋ Klant”.</div>'}
+    </div>`;
 }
 
 function toggleTruckCheck(truckId, key) {
@@ -259,6 +332,23 @@ function deleteTruckHistory(id) {
 }
 
 // ── TRUCK ITEMS ────────────────────────────────────────────────
+let currentStopId = null;  // when set, products added go to this client stop
+
+function openTruckItemModal(stopId){
+  currentStopId = stopId || null;
+  const t = truckCounts.find(x=>x.id===currentTruckId);
+  const titleEl = document.getElementById('ti-modal-title');
+  if(titleEl){
+    if(currentStopId && t){
+      const st=(t.stops||[]).find(s=>s.id===currentStopId);
+      titleEl.textContent = st?('Produkte vir '+st.customerName):'Voeg by Vragmotor';
+    } else titleEl.textContent='Voeg by Vragmotor';
+  }
+  document.getElementById('ti-search').value='';
+  renderTruckPicker();
+  openModal('truck-item-modal');
+}
+
 function renderTruckPicker() {
   const search = (document.getElementById('ti-search')?.value||'').toLowerCase();
   const filtered = products.filter(p=>p.name.toLowerCase().includes(search)||p.category.toLowerCase().includes(search)).slice(0,40);
@@ -274,31 +364,80 @@ function addTruckItem(prodId) {
   const p = products.find(x=>x.id===prodId); if (!p||!currentTruckId) return;
   const price = getDiscounted(p);
   const t = truckCounts.find(x=>x.id===currentTruckId); if (!t) return;
-  const ex = t.items.find(i=>i.productId===prodId);
+  // Items are keyed by product + which client stop they belong to, so
+  // the same product going to two different clients stays separate.
+  const stopId = currentStopId || null;
+  const ex = t.items.find(i=>i.productId===prodId && (i.stopId||null)===stopId);
   if (ex) { ex.qty++; ex.total=ex.qty*ex.price; }
-  else t.items.push({productId:prodId,name:p.name,unit:p.unit,price,qty:1,total:price});
+  else t.items.push({productId:prodId,name:p.name,unit:p.unit,price,qty:1,total:price,stopId});
   save('v3_trucks',truckCounts);
   closeModal('truck-item-modal');
   renderTruckDetail();
 }
 
-function updateTruckQty(prodId,delta) {
+function updateTruckQty(prodId,delta,stopId) {
   const t = truckCounts.find(x=>x.id===currentTruckId); if (!t) return;
-  const i = t.items.find(x=>x.productId===prodId); if (!i) return;
+  const i = t.items.find(x=>x.productId===prodId && (x.stopId||null)===(stopId||null)); if (!i) return;
   i.qty=Math.max(0,i.qty+delta); i.total=i.qty*i.price;
   save('v3_trucks',truckCounts); renderTruckDetail();
 }
 
-function setTruckQty(prodId,val) {
+function setTruckQty(prodId,val,stopId) {
   const t = truckCounts.find(x=>x.id===currentTruckId); if (!t) return;
-  const i = t.items.find(x=>x.productId===prodId); if (!i) return;
+  const i = t.items.find(x=>x.productId===prodId && (x.stopId||null)===(stopId||null)); if (!i) return;
   i.qty=parseInt(val)||0; i.total=i.qty*i.price;
   save('v3_trucks',truckCounts); renderTruckDetail();
 }
 
-function removeTruckItem(prodId) {
+function removeTruckItem(prodId,stopId) {
   const t = truckCounts.find(x=>x.id===currentTruckId); if (!t) return;
-  t.items=t.items.filter(i=>i.productId!==prodId);
+  t.items=t.items.filter(i=>!(i.productId===prodId && (i.stopId||null)===(stopId||null)));
+  save('v3_trucks',truckCounts); renderTruckDetail();
+}
+
+// ── CLIENT STOPS (merged delivery) ─────────────────────────────
+function openTruckStopModal(){
+  const sel=document.getElementById('ts-cust');
+  if(sel) sel.innerHTML='<option value="">-- Kies klant --</option>'+customers.map(c=>`<option value="${c.id}">${escH(c.name)}</option>`).join('');
+  document.getElementById('ts-km').value='';
+  document.getElementById('ts-notes').value='';
+  openModal('truck-stop-modal');
+}
+
+function addTruckStop(){
+  const t=truckCounts.find(x=>x.id===currentTruckId); if(!t) return;
+  const custId=parseInt(document.getElementById('ts-cust').value);
+  if(!custId){ alert('Kies asseblief \u2019n klant'); return; }
+  const cust=customers.find(c=>c.id===custId); if(!cust) return;
+  const km=parseFloat(document.getElementById('ts-km').value)||0;
+  if(!t.stops) t.stops=[];
+  t.stops.push({id:uid(),customerId:cust.id,customerName:cust.name,
+    address:cust.farm?`${cust.farm}, ${cust.area||''}`:(cust.area||''),
+    km, notes:document.getElementById('ts-notes').value, done:false});
+  save('v3_trucks',truckCounts);
+  closeModal('truck-stop-modal');
+  renderTruckDetail();
+}
+
+function updateStopKm(stopId,val){
+  const t=truckCounts.find(x=>x.id===currentTruckId); if(!t) return;
+  const s=(t.stops||[]).find(x=>x.id===stopId); if(!s) return;
+  s.km=parseFloat(val)||0; save('v3_trucks',truckCounts);
+  renderTruckRoute(t); // light refresh of just the route totals
+}
+
+function toggleStopDone(stopId){
+  const t=truckCounts.find(x=>x.id===currentTruckId); if(!t) return;
+  const s=(t.stops||[]).find(x=>x.id===stopId); if(!s) return;
+  s.done=!s.done; save('v3_trucks',truckCounts); renderTruckDetail();
+}
+
+function removeTruckStop(stopId){
+  const t=truckCounts.find(x=>x.id===currentTruckId); if(!t) return;
+  if(!confirm('Verwyder hierdie klant van die sessie?')) return;
+  t.stops=(t.stops||[]).filter(s=>s.id!==stopId);
+  // un-tag any items that were for this stop (keep them on the load)
+  t.items.forEach(i=>{ if((i.stopId||null)===stopId) i.stopId=null; });
   save('v3_trucks',truckCounts); renderTruckDetail();
 }
 
