@@ -9,7 +9,7 @@
 ═══════════════════════════════════════════════════════════════ */
 
 // Bump this string whenever you want to force a full refresh of cached files.
-const CACHE = 'lobol-cache-v2';
+const CACHE = 'lobol-cache-v3';
 
 // The app shell (everything needed to run offline). Paths are relative
 // so it works under a GitHub Pages project URL (user.github.io/repo/).

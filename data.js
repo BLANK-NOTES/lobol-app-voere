@@ -87,6 +87,27 @@ const DEFAULT_PRODUCTS = [
   {id:112,name:"LOBOL 80:20",category:"Voerkraal",price:268,pricePerTon:5359.41,unit:"50kg sak",description:"LOBOL 80:20 voerkraal konsentraat.",useCase:"Beesvoerkraal – 80:20 Meng"},
   {id:113,name:"LOBOL 300 (HPK)",category:"Voerkraal",price:297,pricePerTon:5939.44,unit:"50kg sak",description:"HPK weergawe van LOBOL 300.",useCase:"Beesvoerkraal – HPK Afronding"},
   {id:114,name:"HPK Silage 375 (Bees Voerkraal)",category:"Voerkraal",price:463,pricePerTon:9259.25,unit:"50kg sak",description:"HPK kuilvoer vetmes konsentraat.",useCase:"Beesvoerkraal – HPK Kuilvoer Vetmes"},
+  // ── PRODUKSIELEKKE & VELDLEKKE (verwys in gidse) ──────────────
+  {id:115,name:"15 RPM Winterproduksielek 26%",category:"Fos/Prot-lekke (Herfs)",price:298,pricePerTon:5960.00,unit:"50kg sak",description:"26% proteïen winterproduksielek. Laat winter / matige koue / oesreste.",useCase:"Beeste – Laat Winter Produksie (±1200g/kop/dag)"},
+  {id:116,name:"25 RPM Somerproduksielek 20%",category:"Fosfaatlekke (Somer)",price:289,pricePerTon:5780.00,unit:"50kg sak",description:"20% proteïen somerproduksielek vir lakterende koeie op groenveld.",useCase:"Beeste – Somer Produksie (±1200g/kop/dag)"},
+  {id:117,name:"50 RPM Winterproduksielek 26%",category:"Fos/Prot-lekke (Herfs)",price:312,pricePerTon:6240.00,unit:"50kg sak",description:"26% proteïen winterproduksielek. Beste aminosuurprofiel vir koue front / middel-laat winter.",useCase:"Beeste – Winter Produksie Koeie met Kalwers (±1000–1400g/kop/dag)"},
+  {id:118,name:"Somer 6 (P6) Fosfaatlek 6%",category:"Fosfaatlekke (Somer)",price:268,pricePerTon:5360.00,unit:"50kg sak",description:"6% fosfaatlek vir droë/dragtige beeste op somerveld.",useCase:"Beeste – Somer Droë/Dragtige (±130g/kop/dag)"},
+  {id:119,name:"Somerfos P12 Fosfaatlek 15%",category:"Fosfaatlekke (Somer)",price:285,pricePerTon:5700.00,unit:"50kg sak",description:"15% proteïen fosfaatlek vir vervangingsverse groeifase op somerveld.",useCase:"Verse – Somer Groei (±170g/kop/dag)"},
+  {id:120,name:"Somerfos 150 Fosfaatlek",category:"Fosfaatlekke (Somer)",price:279,pricePerTon:5580.00,unit:"50kg sak",description:"Fosfaatlek vir droë beeste, weiding pypstadium (laat somer).",useCase:"Beeste – Laat Somer Droë (±200g/kop/dag)"},
+  {id:121,name:"SS Lek 26% (Verse)",category:"Lekke vir Verse",price:307,pricePerTon:6140.00,unit:"50kg sak",description:"26% proteïen lek vir ouer verse (13–18 maande) deur winter.",useCase:"Verse – Winter 13–18 mnde (±680g/kop/dag)"},
+  {id:122,name:"HPK SS Lek (Verse)",category:"Lekke vir Verse",price:405,pricePerTon:8100.00,unit:"50kg sak",description:"HPK weergawe SS Lek vir vervangingsverse – teiken 330kg @ 16 mnde.",useCase:"Verse – HPK Groei na 330kg @ 16 mnde"},
+  {id:123,name:"NPN Fos Oorgangslek 27%",category:"Fos/Prot-lekke (Herfs)",price:296,pricePerTon:5920.00,unit:"50kg sak",description:"27% proteïen oorgangslek (herfs) – bou kondisie voor winter.",useCase:"Beeste – Herfs Oorgang Mrt/Apr (±220g/kop/dag)"},
+  {id:124,name:"4x4 Winteronderhoudslek 38% (Soetveld)",category:"Lekke vir Beeste",price:301,pricePerTon:6020.00,unit:"50kg sak",description:"38% proteïen winteronderhoudslek vir soetveld.",useCase:"Beeste – Hoog Winter Soetveld (±500g/kop/dag)"},
+  {id:125,name:"BURGERS 430 WR 43% (Suurveld)",category:"Lekke vir Beeste",price:318,pricePerTon:6360.00,unit:"50kg sak",description:"43% proteïen winteronderhoudslek vir suurveld.",useCase:"Beeste – Hoog Winter Suurveld (±500g/kop/dag)"},
+  {id:126,name:"Crash Course Somer 20%",category:"Lekke vir Bulle (Crash Course)",price:305,pricePerTon:6100.00,unit:"50kg sak",description:"20% proteïen crash course vir spekulasie kalwers op groen weiding.",useCase:"Spekulasie – Somer Groenweiding"},
+  {id:127,name:"Crash Course 100–250kg 22%",category:"Lekke vir Bulle (Crash Course)",price:312,pricePerTon:6240.00,unit:"50kg sak",description:"22% proteïen crash course vir jonger spekulasie kalwers (100–250kg).",useCase:"Spekulasie – Jonger Kalwers 100–250kg"},
+  {id:128,name:"Crash Course 250–500kg 22%",category:"Lekke vir Bulle (Crash Course)",price:309,pricePerTon:6180.00,unit:"50kg sak",description:"22% proteïen crash course vir swaarder spekulasie kalwers (250–500kg).",useCase:"Spekulasie – Swaarder Kalwers 250–500kg"},
+  {id:129,name:"Boost Lick Somer",category:"Fosfaatlekke (Somer)",price:288,pricePerTon:5760.00,unit:"50kg sak",description:"Somerlek vir spekulasie kalwers (130–180kg).",useCase:"Spekulasie – Somer 130–180kg (±550g/100kg LG)"},
+  {id:130,name:"Groenveld Somerproduksielek 23%",category:"Fosfaatlekke (Somer)",price:294,pricePerTon:5880.00,unit:"50kg sak",description:"23% proteïen somerproduksielek vir groenveld (skape/beeste).",useCase:"Skape/Beeste – Somer Groenveld Produksie"},
+  {id:131,name:"Super ME Winterproduksielek 26%",category:"Fos/Prot-lekke (Herfs)",price:316,pricePerTon:6320.00,unit:"50kg sak",description:"26% proteïen hoë-energie winterproduksielek.",useCase:"Skape/Beeste – Winter Produksie"},
+  {id:132,name:"LOBOL Energielek 15%",category:"Lekke vir Beeste",price:264,pricePerTon:5280.00,unit:"50kg sak",description:"15% proteïen energielek.",useCase:"Beeste – Energie Aanvulling"},
+  {id:133,name:"LOBOL 2:1:1 Winteronderhoudslek 28%",category:"Lekke vir Beeste",price:286,pricePerTon:5720.00,unit:"50kg sak",description:"28% proteïen 2:1:1 winteronderhoudslek.",useCase:"Beeste – Winter Onderhoud"},
+  {id:134,name:"ROM ZB RPM Kragvoer 14.5%",category:"Lekke vir Bulle (Crash Course)",price:298,pricePerTon:5960.00,unit:"50kg sak",description:"14.5% kragvoer vir bulle (somer & winter). Veiling voorbereiding.",useCase:"Bulle – Veiling Voorbereiding"},
 ];
 
 const DEFAULT_DUTIES = [
@@ -145,6 +166,20 @@ const DEFAULT_FLEET = [
 
 // ── STATE ───────────────────────────────────────────────────────
 let products = STORE.get('v3_products', DEFAULT_PRODUCTS);
+// MIGRATION: if the saved product list is missing any default product
+// (e.g. the leks referenced in the guides that were added later), add
+// them in WITHOUT touching the user's existing products or edited
+// prices. New products are appended; existing ones are left as-is.
+(function migrateProducts(){
+  try {
+    const existingIds = new Set(products.map(p=>p.id));
+    const missing = DEFAULT_PRODUCTS.filter(p=>!existingIds.has(p.id));
+    if (missing.length){
+      products = products.concat(missing);
+      STORE.set('v3_products', products);
+    }
+  } catch(e){}
+})();
 let duties = STORE.get('v3_duties', DEFAULT_DUTIES);
 let reminders = STORE.get('v3_reminders', DEFAULT_REMINDERS);
 let factoryStock = STORE.get('v3_stock', []);
