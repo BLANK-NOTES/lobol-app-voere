@@ -5,25 +5,48 @@
    (--accent, --card, --border, etc.) so the look stays consistent.
 ═══════════════════════════════════════════════════════════════ */
 
+/* ── 0. Readability: lift the muted text colours so labels, dates,
+        sub-text and counts are easy to read (the old greens were very
+        low-contrast on the dark background). Applies app-wide. ──── */
+:root {              /* dark theme (default) — lighten muted greens */
+  --text2: #bcd4b4;
+  --text3: #8aa888;
+}
+[data-theme="light"] {  /* light theme — darken muted greens for contrast */
+  --text2: #2f542f;
+  --text3: #527052;
+}
+
 /* ── 1. Never allow sideways scrolling ──────────────────────── */
 html, body {
   max-width: 100%;
   overflow-x: hidden;
 }
-*, *::before, *::after {
-  /* Stops long words / numbers from forcing the page wider */
-  min-width: 0;
-}
 
-/* Grid & flex children clip instead of pushing the layout wider */
+/* Only GRID cells get min-width:0 (prevents a wide number from
+   blowing the grid out). Flex chips/tabs are handled separately so
+   they keep their natural width and scroll instead of squashing. */
 .dash-stats > *, .stats-grid > *, .quick-nav > *, .export-stats > *,
 .weather-stats-row > *, .weather-fc > *, .notes-grid > *,
 .info-categories > *, .month-bar > * {
   min-width: 0;
   overflow-wrap: anywhere;
 }
+/* Keep stat numbers on one line and inside their box */
+.stat-val, .dash-stat-val, .wstat-val, .export-stats .stat-val {
+  white-space: nowrap;
+}
 
-/* ── 2. Smooth momentum scrolling for horizontal strips ─────── */
+/* ── 2. Chips & tabs: never shrink — let the row scroll sideways.
+        This is what stops "Fosfaatlekke (Somer)" from collapsing
+        into two cramped lines. ──────────────────────────────────── */
+.chips { flex-wrap: nowrap; }
+.chip {
+  flex: 0 0 auto;        /* don't grow, don't shrink */
+  white-space: nowrap;   /* keep the whole label on one line */
+}
+
+/* ── 3. Smooth momentum scrolling for horizontal strips ─────── */
 .chips, .tab-row, .weather-hourly, .cmp-table-wrap, .picker-list {
   -webkit-overflow-scrolling: touch;
 }
@@ -34,6 +57,12 @@ html, body {
    missed them. 540px comfortably includes every modern iPhone.
 ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
+
+  /* #main is a flex child of #app. Without min-width:0 a flex item
+     won't shrink below its content's intrinsic width, so the whole
+     column balloons wider than the screen and gets clipped. This is
+     the fix for "numbers/cards load off the grid". */
+  #main, .page { min-width: 0; }
 
   /* Respect the notch / status bar and the home-indicator bar */
   #main {
@@ -59,6 +88,16 @@ html, body {
 
   /* Bottom nav: taller, easier to hit, clear of the home indicator */
   .mob-nav-item { min-height: 52px; justify-content: center; }
+
+  /* Nudge the smallest labels up so they're actually readable on a
+     phone (several were 9–11px on a dark background) */
+  .mob-nav-item { font-size: 10px; }
+  .stat-lbl { font-size: 11px; }
+  .dash-stat-lbl { font-size: 12px; }
+  .wstat-lbl, .wday-name, .wday-rain, .wday-uv, .whour-rain,
+  .whour-time { font-size: 10px; }
+  .prod-cat, .picker-sub, .eie-sub, .dash-sale-date,
+  .dash-rem-title, .toggle-sub { font-size: 12.5px; }
 
   /* Tab rows: fill the width when they fit, scroll when they don't
      (e.g. the 4-tab truck page) instead of wrapping to two lines */
