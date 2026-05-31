@@ -1,0 +1,126 @@
+/* ═══════════════════════════════════════════════════════════════
+   mobile.css  —  Mobile / iPhone responsive layer
+   Loaded LAST so it wins the cascade. Tuned for iPhone 11 (414px
+   wide) and other phones. Reuses the existing design tokens
+   (--accent, --card, --border, etc.) so the look stays consistent.
+═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. Never allow sideways scrolling ──────────────────────── */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+*, *::before, *::after {
+  /* Stops long words / numbers from forcing the page wider */
+  min-width: 0;
+}
+
+/* Grid & flex children clip instead of pushing the layout wider */
+.dash-stats > *, .stats-grid > *, .quick-nav > *, .export-stats > *,
+.weather-stats-row > *, .weather-fc > *, .notes-grid > *,
+.info-categories > *, .month-bar > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ── 2. Smooth momentum scrolling for horizontal strips ─────── */
+.chips, .tab-row, .weather-hourly, .cmp-table-wrap, .picker-list {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   3. Phone layout  (covers iPhone SE 375 → iPhone Pro Max 430)
+   The old breakpoints stopped at 400px, so an iPhone 11 (414px)
+   missed them. 540px comfortably includes every modern iPhone.
+═══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Respect the notch / status bar and the home-indicator bar */
+  #main {
+    padding-top: calc(16px + env(safe-area-inset-top, 0px));
+    padding-left: calc(16px + env(safe-area-inset-left, 0px));
+    padding-right: calc(16px + env(safe-area-inset-right, 0px));
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Inputs at 16px stop iOS Safari from auto-zooming on focus */
+  input, textarea, select,
+  .search-wrap input {
+    font-size: 16px;
+  }
+
+  /* Comfortable tap targets (Apple recommends ~44px) */
+  .icon-btn { min-width: 40px; min-height: 40px; }
+  .icon-btn.sm { min-width: 34px; min-height: 34px; }
+  .btn { min-height: 44px; }
+  .btn-sm { min-height: 36px; }
+  .chip { min-height: 34px; display: inline-flex; align-items: center; }
+  .nav-link, .mob-grid-item { min-height: 44px; }
+
+  /* Bottom nav: taller, easier to hit, clear of the home indicator */
+  .mob-nav-item { min-height: 52px; justify-content: center; }
+
+  /* Tab rows: fill the width when they fit, scroll when they don't
+     (e.g. the 4-tab truck page) instead of wrapping to two lines */
+  .tab-row {
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+  }
+  .tab-row::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 1 0 auto;
+    white-space: nowrap;
+  }
+
+  /* Modal bottom-sheet sits above the home indicator */
+  .modal {
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* ── Grids that were too cramped on a phone ──────────────── */
+
+  /* 4-stat strips stay 4-across but tighten so they never clip */
+  .stats-grid, .export-stats { gap: 6px; }
+  .stats-grid .stat-val, .export-stats .stat-val { font-size: 19px; }
+
+  /* Quick-access: 4 across is tight on narrow phones → 3 reads better */
+  .quick-nav { grid-template-columns: repeat(3, 1fr); }
+
+  /* 7-day forecast wraps to a 4-column grid (2 rows) instead of
+     seven slivers — this is the rule iPhone 11 was missing */
+  .weather-fc { grid-template-columns: repeat(4, 1fr); }
+  .weather-fc .wday:nth-child(4n) { border-right: none; }
+
+  /* Notes read better as a single column on a phone */
+  .notes-grid { grid-template-columns: 1fr; }
+
+  /* Knowledge-base categories: 2 across is fine, keep it tidy */
+  .info-categories { grid-template-columns: repeat(2, 1fr); }
+
+  /* Feed-calculator herd inputs stack cleanly */
+  .calc-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Compare table: let it scroll sideways with momentum */
+  .cmp-table-wrap { -webkit-overflow-scrolling: touch; }
+
+  /* Headings scale down slightly so they don't crowd the + buttons */
+  .page-header h1 { font-size: 21px; }
+  .dash-greeting { font-size: 20px; }
+}
+
+/* ── 4. Very small phones (iPhone SE / Mini, ≤375px) ────────── */
+@media (max-width: 375px) {
+  .stats-grid, .export-stats { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid .stat-val, .export-stats .stat-val { font-size: 22px; }
+  .quick-nav { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ── 5. Landscape phones: lift content clear of the rounded
+        corners / notch on the left or right edge ─────────────── */
+@media (max-width: 920px) and (orientation: landscape) {
+  #mobile-nav {
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+}

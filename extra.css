@@ -1,0 +1,145 @@
+/* ═══════════════════════════════════════
+   EXTRA STYLES – v2 features
+═══════════════════════════════════════ */
+
+/* Worker groups */
+.badge-blue{background:var(--bdim);color:var(--blue)}
+.wpill{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:99px;padding:6px 12px 6px 6px}
+.wpill-av{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#0f1f0f;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.wpill-name{font-weight:700;font-size:13px}
+.wpill-prog{font-size:11px;color:var(--text3)}
+#workers-sum{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+
+/* Stock */
+.stock-sort-row{display:flex;align-items:center;gap:6px;overflow-x:auto;margin-bottom:10px;scrollbar-width:none}
+.stock-sort-row::-webkit-scrollbar{display:none}
+#stock-top3{margin-bottom:4px}
+.stock-value-banner{background:var(--adim);border:1px solid var(--accent);border-radius:8px;padding:8px 14px;font-size:13px;color:var(--accent);margin-bottom:10px}
+
+/* Truck history tab */
+.truck-card{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;flex-wrap:wrap}
+.truck-card:hover{border-color:var(--accent)}
+.truck-card-visual{flex:1;display:flex;flex-direction:column;gap:2px}
+.truck-mini-fill{background:var(--bg3);border-radius:99px;height:4px;overflow:hidden}
+.truck-mini-fill-bar{height:100%;border-radius:99px;transition:width .3s}
+
+/* Health records */
+.health-species-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;scrollbar-width:none}
+.health-species-chips::-webkit-scrollbar{display:none}
+
+/* Delivery stop */
+.stop-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.stop-row:last-child{border-bottom:none}
+.stop-num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#0f1f0f;font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stop-ctrl{display:flex;gap:4px}
+
+/* Learn notes */
+#learn-notes-list .card{cursor:default}
+
+/* Detail link */
+.detail-link{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--blue);text-decoration:none;padding:4px 0}
+
+/* Tab rows */
+.tab-row{display:flex;gap:4px;overflow-x:auto;margin-bottom:14px;scrollbar-width:none}
+.tab-row::-webkit-scrollbar{display:none}
+.tab-btn{background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:8px 14px;border-radius:99px;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.tab-btn.active{background:var(--accent);color:#0f1f0f;border-color:var(--accent)}
+
+/* Truck detail checklist */
+.wk-duty-done-row{opacity:.6}
+.wk-duty-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.wk-duty-row:last-child{border-bottom:none}
+.small-check{width:22px;height:22px;border-radius:4px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;flex-shrink:0;transition:all .15s}
+.small-check.assigned{background:var(--adim);border-color:var(--accent);color:var(--accent)}
+.wk-duty-info{flex:1;display:flex;flex-direction:column;gap:1px}
+.wk-duty-name{font-size:13px;font-weight:600}
+.wk-duty-name.dimmed{color:var(--text3);font-weight:400}
+.wk-duty-cat{font-size:11px;color:var(--text3)}
+.done-check{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.done-check.done{background:var(--adim);border-color:var(--accent)}
+
+/* Worker card */
+.worker-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:8px}
+.worker-head{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
+.worker-inactive{opacity:.6}
+.wk-av{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#0f1f0f;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wk-info{flex:1}
+.wk-name{font-weight:700;font-size:14px}
+.wk-role{font-size:12px;color:var(--text3)}
+.wk-bar{background:var(--bg3);border-radius:99px;height:4px;margin-top:4px}
+.wk-bar-fill{background:var(--accent);height:100%;border-radius:99px;transition:width .3s}
+.wk-task-lbl{font-size:11px;color:var(--text3);margin-top:2px}
+.wk-detail{padding:0 14px 14px;border-top:1px solid var(--border)}
+.wk-duties-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin:12px 0 6px}
+
+/* Stock cards */
+.stock-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:8px}
+.stock-card.expired{border-color:var(--red);background:rgba(224,92,92,.04)}
+.stock-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.stock-name{font-weight:700;font-size:14px}
+.stock-details{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.detail-item{font-size:12px;color:var(--text2);background:var(--bg3);border-radius:6px;padding:3px 8px}
+.stock-notes{font-size:13px;color:var(--text3);margin-bottom:6px}
+.stock-footer{display:flex;justify-content:space-between;align-items:center}
+.stock-updated{font-size:11px;color:var(--text3)}
+
+/* Delivery cards */
+.deliv-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:8px}
+.deliv-card.active-route{border-color:var(--orange)}
+.deliv-head{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
+.deliv-icon{font-size:22px;flex-shrink:0}
+.deliv-info{flex:1}
+.deliv-truck{font-weight:700;font-size:14px}
+.deliv-meta{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.deliv-prog{background:var(--bg3);height:3px}
+.deliv-prog-fill{background:var(--accent);height:100%;transition:width .3s}
+.deliv-detail{padding:12px 14px;border-top:1px solid var(--border)}
+.deliv-stop{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.deliv-stop:last-of-type{border-bottom:none}
+.done-stop{opacity:.5}
+.check-box{width:22px;height:22px;border-radius:4px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;flex-shrink:0;transition:all .15s}
+.check-box.checked{background:var(--accent);border-color:var(--accent);color:#0f1f0f;font-weight:800}
+.stop-seq{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.stop-name{font-weight:700;font-size:14px}
+.stop-notes-sm{font-size:12px;color:var(--text3);margin-top:2px}
+.status-sel{background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:13px;width:auto;cursor:pointer}
+
+/* Guide styles */
+.guide-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.guide-header{display:flex;align-items:center;gap:10px;padding:14px;width:100%;background:transparent;color:var(--text);text-align:left;cursor:pointer;font-family:'DM Sans',sans-serif}
+.guide-title{font-weight:700;font-size:15px;flex:1}
+.guide-body{padding:0 14px 14px;border-top:1px solid var(--border)}
+.guide-icon{font-size:20px}
+.gitem-list{padding-left:16px;display:flex;flex-direction:column;gap:4px}
+.gitem-list li{font-size:13px;color:var(--text2);line-height:1.5}
+.guide-note{background:var(--adim);border-left:3px solid var(--accent);padding:8px 12px;font-size:13px;color:var(--accent);border-radius:0 8px 8px 0;margin-top:10px}
+.month-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:8px}
+@media(max-width:480px){.month-bar{grid-template-columns:repeat(4,1fr)}}
+.month-item{background:var(--card);border:1px solid;border-radius:8px;padding:6px 4px;text-align:center}
+.month-name{font-size:11px;font-weight:700}
+.month-phase{font-size:9px;margin-top:2px}
+.dosage-section{margin-bottom:14px}
+.dosage-title{font-weight:700;font-size:13px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.dosage-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
+.dosage-table{width:100%;border-collapse:collapse;font-size:13px}
+.dosage-table th{background:var(--bg3);padding:8px 10px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text3)}
+.dosage-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2)}
+.dosage-table tr:last-child td{border-bottom:none}
+.dos-prod{font-weight:600;color:var(--text)}
+.dos-intake{color:var(--accent);font-weight:600}
+
+/* Duty styles */
+.duty-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
+.duty-card.done-card{opacity:.55}
+.duty-top{display:flex;align-items:flex-start;gap:10px}
+.duty-info{flex:1}
+.duty-title-text{font-weight:700;font-size:14px}
+.duty-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag{background:var(--bg3);color:var(--text2);border:1px solid var(--border);font-size:11px;padding:2px 8px;border-radius:99px}
+.tag.red{background:var(--rdim);color:var(--red);border-color:var(--rdim)}
+.tag.orange{background:var(--odim);color:var(--orange);border-color:var(--odim)}
+.tag.green{background:var(--adim);color:var(--accent);border-color:var(--adim)}
+.duty-acts{display:flex;gap:6px;flex-shrink:0}
+.duty-notes{font-size:13px;color:var(--text3);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
+.duties-prog{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:12px}
+.duties-prog-text{font-size:13px;font-weight:600;margin-bottom:6px}
